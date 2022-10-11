@@ -114,7 +114,22 @@ class Things:
                 errors.things["delete"], http_resp.status_code)
         return mf_resp
 
-    def connect(self, channel_ids, thing_ids, token):
+    def connect(self, channel_id, thing_id, token):
+        '''Disconnect thing and channel'''
+        http_resp = requests.post(
+            self.url + "/channels/" + channel_id + "/things/" + thing_id,
+            headers={"Authorization": token}
+        )
+        mf_resp = response.Response()
+        if http_resp.status_code != 200:
+            mf_resp.error.status = 1
+            mf_resp.error.message = errors.handle_error(
+                errors.things["connect"], http_resp.status_code)
+        else:
+            mf_resp.value = True 
+        return mf_resp
+
+    def connect_things(self, channel_ids, thing_ids, token):
         '''Connects thing and channel'''
         payload = {
             "channel_ids": channel_ids,
@@ -126,18 +141,18 @@ class Things:
             json=payload
         )
         mf_resp = response.Response()
-        if http_resp.status_code != 201:
+        if http_resp.status_code != 200:
             mf_resp.error.status = 1
             mf_resp.error.message = errors.handle_error(
                 errors.things["connect"], http_resp.status_code)
         else:
-            mf_resp.value = http_resp.json()
+            mf_resp.value = True # http_resp.json()
         return mf_resp
 
-    def disconnect(self, channel_ids, thing_ids, token):
+    def disconnect(self, channel_id, thing_id, token):
         '''Disconnect thing and channel'''
         http_resp = requests.delete(
-            self.url + "/channels/" + channel_ids + "/things/" + thing_ids,
+            self.url + "/channels/" + channel_id + "/things/" + thing_id,
             headers={"Authorization": token}
         )
         mf_resp = response.Response()
@@ -145,6 +160,8 @@ class Things:
             mf_resp.error.status = 1
             mf_resp.error.message = errors.handle_error(
                 errors.things["disconnect"], http_resp.status_code)
+        else:
+            mf_resp.value = True 
         return mf_resp
 
     def disconnect_things(self, channel_ids, thing_ids, token):
@@ -163,4 +180,6 @@ class Things:
             mf_resp.error.status = 1
             mf_resp.error.message = errors.handle_error(
                 errors.things["delete"], http_resp.status_code)
+        else:
+            mf_resp.value = True 
         return mf_resp
