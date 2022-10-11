@@ -124,9 +124,7 @@ class Things:
         if http_resp.status_code != 200:
             mf_resp.error.status = 1
             mf_resp.error.message = errors.handle_error(
-                errors.things["connect"], http_resp.status_code)
-        else:
-            mf_resp.value = True 
+                errors.things["connect"], http_resp.status_code) 
         return mf_resp
 
     def connect_things(self, channel_ids, thing_ids, token):
@@ -145,8 +143,6 @@ class Things:
             mf_resp.error.status = 1
             mf_resp.error.message = errors.handle_error(
                 errors.things["connect"], http_resp.status_code)
-        else:
-            mf_resp.value = True # http_resp.json()
         return mf_resp
 
     def disconnect(self, channel_id, thing_id, token):
@@ -159,12 +155,10 @@ class Things:
         if http_resp.status_code != 204:
             mf_resp.error.status = 1
             mf_resp.error.message = errors.handle_error(
-                errors.things["disconnect"], http_resp.status_code)
-        else:
-            mf_resp.value = True 
+                errors.things["disconnect"], http_resp.status_code) 
         return mf_resp
 
-    def disconnect_things(self, channel_ids, thing_ids, token):
+    def disconnect_things(self, channel_ids, thing_ids, token): # this function doesnot exist? in mainflux_master (upper 0.13.0)
         '''Disconnect things from channels specified by lists of IDs'''
         payload = {
             "thing_ids": thing_ids,
@@ -180,6 +174,4 @@ class Things:
             mf_resp.error.status = 1
             mf_resp.error.message = errors.handle_error(
                 errors.things["delete"], http_resp.status_code)
-        else:
-            mf_resp.value = True 
         return mf_resp
